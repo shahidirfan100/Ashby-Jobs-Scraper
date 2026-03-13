@@ -1,0 +1,53 @@
+{
+  "title": "Ashby Jobs Scraper",
+  "description": "Scrape job listings from Ashby job boards. Provide an Ashby board URL and the actor collects structured listing data with optional job detail enrichment.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrl": {
+      "title": "Ashby board URL",
+      "type": "string",
+      "description": "Ashby board URL or a job URL on an Ashby board. The actor normalizes job URLs back to the board before scraping.",
+      "editor": "textfield",
+      "prefill": "https://jobs.ashbyhq.com/openai/"
+    },
+    "collectDetails": {
+      "title": "Collect job details",
+      "type": "boolean",
+      "description": "If enabled, the actor opens each Ashby job page to collect description and application form details.",
+      "editor": "checkbox",
+      "default": true
+    },
+    "results_wanted": {
+      "title": "Maximum number of jobs",
+      "type": "integer",
+      "description": "Maximum number of jobs to save.",
+      "minimum": 1,
+      "default": 20,
+      "prefill": 20,
+      "editor": "number"
+    },
+    "max_pages": {
+      "title": "Maximum number of pages",
+      "type": "integer",
+      "description": "Compatibility field retained from the previous actor. Ashby boards return all jobs in a single page, so this value is ignored.",
+      "minimum": 1,
+      "editor": "number",
+      "default": 1,
+      "prefill": 1
+    },
+    "proxyConfiguration": {
+      "title": "Proxy configuration",
+      "type": "object",
+      "description": "Optional proxy configuration for board and detail requests.",
+      "editor": "proxy",
+      "default": {
+        "useApifyProxy": false
+      }
+    }
+  },
+  "required": [
+    "startUrl"
+  ],
+  "additionalProperties": false
+}

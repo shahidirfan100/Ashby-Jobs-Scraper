@@ -1,0 +1,124 @@
+{
+  "actorSpecification": 1,
+  "fields": {
+    "title": "Ashby jobs dataset",
+    "description": "Normalized Ashby job listing rows.",
+    "type": "object",
+    "properties": {
+      "title": {
+        "title": "Title",
+        "type": "string",
+        "description": "Job title"
+      },
+      "company_name": {
+        "title": "Company",
+        "type": "string",
+        "description": "Company or legal entity name"
+      },
+      "department_name": {
+        "title": "Department",
+        "type": "string",
+        "description": "Department name from the Ashby board"
+      },
+      "team_name": {
+        "title": "Team",
+        "type": "string",
+        "description": "Team name from the Ashby board"
+      },
+      "location_name": {
+        "title": "Primary location",
+        "type": "string",
+        "description": "Primary job location"
+      },
+      "employment_type": {
+        "title": "Employment type",
+        "type": "string",
+        "description": "Employment type such as FullTime or Intern"
+      },
+      "workplace_type": {
+        "title": "Workplace type",
+        "type": "string",
+        "description": "Remote, Hybrid, OnSite, or blank when not listed"
+      },
+      "published_date": {
+        "title": "Published date",
+        "type": "string",
+        "description": "Date the job was published"
+      },
+      "compensation_tier_summary": {
+        "title": "Compensation summary",
+        "type": "string",
+        "description": "Compensation summary displayed on the board"
+      },
+      "description_text": {
+        "title": "Description text",
+        "type": "string",
+        "description": "Plain-text job description"
+      },
+      "url": {
+        "title": "URL",
+        "type": "string",
+        "description": "Direct job URL"
+      }
+    }
+  },
+  "views": {
+    "overview": {
+      "title": "Overview",
+      "transformation": {
+        "fields": [
+          "title",
+          "company_name",
+          "department_name",
+          "team_name",
+          "location_name",
+          "employment_type",
+          "published_date",
+          "compensation_tier_summary",
+          "url"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "title": {
+            "label": "Job Title",
+            "format": "text"
+          },
+          "company_name": {
+            "label": "Company",
+            "format": "text"
+          },
+          "department_name": {
+            "label": "Department",
+            "format": "text"
+          },
+          "team_name": {
+            "label": "Team",
+            "format": "text"
+          },
+          "location_name": {
+            "label": "Primary location",
+            "format": "text"
+          },
+          "employment_type": {
+            "label": "Employment type",
+            "format": "text"
+          },
+          "published_date": {
+            "label": "Published",
+            "format": "text"
+          },
+          "compensation_tier_summary": {
+            "label": "Compensation",
+            "format": "text"
+          },
+          "url": {
+            "label": "URL",
+            "format": "link"
+          }
+        }
+      }
+    }
+  }
+}
