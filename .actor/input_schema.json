@@ -46,8 +46,6 @@
       }
     }
   },
-  "required": [
-    "startUrl"
-  ],
+  "required": [],
   "additionalProperties": false
 }

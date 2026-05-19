@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { Actor, log } from 'apify';
 import { Dataset } from 'crawlee';
 import { load as cheerioLoad } from 'cheerio';
@@ -438,6 +440,49 @@ async function mapWithConcurrency(items, concurrency, mapper) {
     return results.filter(Boolean);
 }
 
+function getResolvedInput(input) {
+    const schemaFallbacks = {};
+    try {
+        const schemaPath = join(process.cwd(), '.actor', 'input_schema.json');
+        const content = readFileSync(schemaPath, 'utf8');
+        const schema = JSON.parse(content);
+        if (schema && schema.properties) {
+            for (const [key, prop] of Object.entries(schema.properties)) {
+                if (prop.prefill !== undefined) {
+                    schemaFallbacks[key] = prop.prefill;
+                } else if (prop.default !== undefined) {
+                    schemaFallbacks[key] = prop.default;
+                }
+            }
+        }
+    } catch (err) {
+        log.debug(`Failed to read input_schema.json fallback: ${err.message}`);
+    }
+
+    const localFallbacks = {};
+    try {
+        const inputJsonPath = join(process.cwd(), 'INPUT.json');
+        const content = readFileSync(inputJsonPath, 'utf8');
+        const parsed = JSON.parse(content);
+        Object.assign(localFallbacks, parsed);
+    } catch (err) {
+        log.debug(`Failed to read INPUT.json fallback: ${err.message}`);
+    }
+
+    const filteredInput = {};
+    for (const [key, val] of Object.entries(input)) {
+        if (val !== undefined) {
+            filteredInput[key] = val;
+        }
+    }
+
+    return {
+        ...localFallbacks,
+        ...schemaFallbacks,
+        ...filteredInput,
+    };
+}
+
 function getStartUrlFromInput(input) {
     if (typeof input.startUrl === 'string' && input.startUrl.trim()) return input.startUrl;
     if (typeof input.url === 'string' && input.url.trim()) return input.url;
@@ -473,7 +518,8 @@ function dedupeRecords(records) {
 }
 
 async function main() {
-    const input = (await Actor.getInput()) || {};
+    const rawInput = (await Actor.getInput()) || {};
+    const input = getResolvedInput(rawInput);
     const {
         collectDetails = true,
         results_wanted,
